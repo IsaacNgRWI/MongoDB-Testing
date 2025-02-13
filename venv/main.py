@@ -2,9 +2,11 @@ import pymongo
 from pymongo.server_api import ServerApi
 import password
 
+'''setting up database'''
+
 uri = 'mongodb+srv://' + password.mongodb_username + ':' + password.mongodb_password + '@cluster0.2o89z.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 # print(uri)
-# feels like an oversight how you could just print the uri and see the password
+# i think thats how you dont leak your api keys on git hub
 
 # creates a new client and connects to the server
 client = pymongo.MongoClient(uri, server_api=ServerApi('1'))
@@ -21,12 +23,12 @@ except Exception as e:
 database = client['test_database']
 collection_customers = database['customers']
 
-# gives the first item in the collection and creates the collection in the database
-customer_dict = {'name': 'Arthur', 'address': 'lemoyne'}  # a record (document)
-test1 = collection_customers.insert_one(customer_dict)
+# creating the first document in the collection creates the collection
+customer_dict = {'name': 'Arthur', 'address': 'Lemoyne'}  # a record (document)
+test1 = collection_customers.insert_one(customer_dict)  # inserts customer_dict into the collection test1
 
-print('test1:', test1)
-print('test1.id:', test1.inserted_id)
+# print('test1:', test1)
+# print('test1.id:', test1.inserted_id)
 
 # prints the names of the different collections in the database
 print('list of collections in the database:', database.list_collection_names())
@@ -48,8 +50,8 @@ customer_dict_list = [
 ]  # lifted directly from w3 school
 
 # inserts the whole list of documents into the collection
-test2 = collection_customers.insert_many(customer_dict_list)
-print('test2:', test2)
+# test2 = collection_customers.insert_many(customer_dict_list)
+# print('test2:', test2)
 
 # inserting documents with specified ids
 specific_id_customer = {'_id': 1909, 'name': 'John', 'address': 'Mexico'}
@@ -59,3 +61,24 @@ try:
 except Exception as e:
     print('ERROR OCCURRED:', e)
 # it seems that you cannot have two documents with the same id and running the program again will result in an error
+
+"""finding stuff in database"""
+
+#  finding any and all records in a collection
+find1 = collection_customers.find_one()  # finds the first instance of the record that matches the description
+print('find1:', find1)
+
+counter = 0
+for i in collection_customers.find(): # finds all occurrences of the records that match the description
+    counter += 1
+    print(f'find2.{counter}: {i}')
+
+# only showing selected fields of records
+counter = 0
+for i in collection_customers.find({},{'address':1}):  # only show address and nothing else
+    counter += 1
+    print(f'find3.{counter}:', i)
+counter = 0
+for i in collection_customers.find({}, {'address':0}):  # show everything but address
+    counter += 1
+    print(f'find4.{counter}:', i)
