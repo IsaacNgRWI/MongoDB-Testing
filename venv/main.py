@@ -82,3 +82,15 @@ counter = 0
 for i in collection_customers.find({}, {'address':0}):  # show everything but address
     counter += 1
     print(f'find4.{counter}:', i)
+
+# querying with find function
+query1 = collection_customers.find({'address':'Lemoyne'}, {'address':1})  # only shows id and address of Lemoyne people
+counter = 0
+for i in query1:
+    counter += 1
+    print(f'query1.{counter}:', i)
+
+# collection_customers.insert_one({'name':'Zeph', 'address':'z street'})
+query2 = collection_customers.find_one({'address': {'$gt': 'y'}})  # finds fist instance whose address starts with a letter larger than 'y'
+print('query2:', query2)  # case sensitive
+
