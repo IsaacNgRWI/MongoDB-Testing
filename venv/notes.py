@@ -84,7 +84,7 @@ for i in collection_customers.find({}, {'address':0}):  # show everything but ad
     print(f'find4.{counter}:', i)
 
 # querying with find function
-query1 = collection_customers.find({'address':'Lemoyne'}, {'address':1})  # only shows id and address of Lemoyne people
+query1 = collection_customers.find({'address':'Lemoyne'}, {'address':1})  # only shows id and address of people whose address is in Lemonyne
 counter = 0
 for i in query1:
     counter += 1
@@ -94,3 +94,7 @@ for i in query1:
 query2 = collection_customers.find_one({'address': {'$gt': 'y'}})  # finds fist instance whose address starts with a letter larger than 'y'
 print('query2:', query2)  # case sensitive
 
+query3 = collection_customers.find_one({'name': {'$regex': '^M'}})  # finds first instance of the person whose name starts with M
+print('query3:', query3)  # regular expression only works on strings
+
+"""sorting stuff in database"""
