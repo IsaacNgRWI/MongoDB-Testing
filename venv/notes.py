@@ -19,6 +19,8 @@ try:
 except Exception as e:
     print(e)
 
+"""setting up collection"""
+
 # sets up the database and the collections(customers) ie. entity
 database = client['test_database']
 collection_customers = database['customers']
@@ -50,7 +52,7 @@ customer_dict_list = [
 ]  # lifted directly from w3 school
 
 # inserts the whole list of documents into the collection
-# test2 = collection_customers.insert_many(customer_dict_list)
+# test2 = collection_customers.insert_many(customer_dict_list)  # will add the records again if program is run again
 # print('test2:', test2)
 
 # inserting documents with specified ids
@@ -62,7 +64,7 @@ except Exception as e:
     print('ERROR OCCURRED:', e)
 # it seems that you cannot have two documents with the same id and running the program again will result in an error
 
-"""finding stuff in database"""
+"""finding stuff in a collection"""
 
 #  finding any and all records in a collection
 find1 = collection_customers.find_one()  # finds the first instance of the record that matches the description
@@ -73,9 +75,9 @@ for i in collection_customers.find(): # finds all occurrences of the records tha
     counter += 1
     print(f'find2.{counter}: {i}')
 
-# only showing selected fields of records
+# only return selected fields of records
 counter = 0
-for i in collection_customers.find({},{'address':1}):  # only show address and nothing else
+for i in collection_customers.find({},{'address':1}):  # only show address and nothing else (_id is shown unless sepcified)
     counter += 1
     print(f'find3.{counter}:', i)
 counter = 0
@@ -97,4 +99,22 @@ print('query2:', query2)  # case sensitive
 query3 = collection_customers.find_one({'name': {'$regex': '^M'}})  # finds first instance of the person whose name starts with M
 print('query3:', query3)  # regular expression only works on strings
 
-"""sorting stuff in database"""
+
+# sorting query results
+counter = 0
+for i in collection_customers.find({'name':{'$gt': 'G'}}).sort('name', -1):  # sorts return by 'name' descending
+    counter += 1
+    print(f'sort1.{counter}:', i)
+
+"""removing records from collection"""
+
+# removing one record from a collection (if multiple exist removes the first instance)
+# collection_customers.delete_one({'name': 'John', 'address': 'Mexico'})  # needs full description of record to work
+
+# removing multiple records from a collection
+delete1 = collection_customers.delete_many({'name': "Arthur"})  # can be broad
+print('records deleted:', delete1.deleted_count)
+
+# collection_customers.delete_many({})  # removes all records in the collection
+
+"""removing collections from database"""
