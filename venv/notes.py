@@ -106,17 +106,27 @@ for i in collection_customers.find({'name':{'$gt': 'G'}}).sort('name', -1):  # s
     counter += 1
     print(f'sort1.{counter}:', i)
 
+# limiting query results
+counter = 0
+for i in collection_customers.find({'name': {'$gt': 'G'}}).limit(5):
+    counter += 1
+    print(f'limit1.{counter}:', i)
+
+
 """updating records in a collection"""
 
 # updating one record (updates first instance it finds)
-update1 = collection_customers.update_one({'name': 'Arthur'}, {'$set': {'address': 'saint denis'}})
+update1 = collection_customers.update_one({'name': 'Arthur'}, {'$set': {'address': 'saint denis'}})  # sets the address to saint denis
 print('update1:', update1)
 print('update1:', collection_customers.find_one({'name': 'Arthur', 'address': 'saint denis'}))
 
 # updating multiple records
 update2 = collection_customers.update_many({'name': {'$gt': 'M'}}, {'$set': {'name': 'Name started after M'}})
 print('update2:', update2)
-print('update2:', collection_customers.find_one({'name': 'Name started after M'}))
+counter = 0
+for i in collection_customers.find({'name': 'Name started after M'}):
+    counter += 1
+    print(f'update2.{counter}:', i)
 
 """removing records from collection"""
 
