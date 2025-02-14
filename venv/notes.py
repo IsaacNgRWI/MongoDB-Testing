@@ -106,6 +106,18 @@ for i in collection_customers.find({'name':{'$gt': 'G'}}).sort('name', -1):  # s
     counter += 1
     print(f'sort1.{counter}:', i)
 
+"""updating records in a collection"""
+
+# updating one record (updates first instance it finds)
+update1 = collection_customers.update_one({'name': 'Arthur'}, {'$set': {'address': 'saint denis'}})
+print('update1:', update1)
+print('update1:', collection_customers.find_one({'name': 'Arthur', 'address': 'saint denis'}))
+
+# updating multiple records
+update2 = collection_customers.update_many({'name': {'$gt': 'M'}}, {'$set': {'name': 'Name started after M'}})
+print('update2:', update2)
+print('update2:', collection_customers.find_one({'name': 'Name started after M'}))
+
 """removing records from collection"""
 
 # removing one record from a collection (if multiple exist removes the first instance)
@@ -118,3 +130,5 @@ print('records deleted:', delete1.deleted_count)
 # collection_customers.delete_many({})  # removes all records in the collection
 
 """removing collections from database"""
+# collection_customers.drop()  # drops the whole collection from the database
+
