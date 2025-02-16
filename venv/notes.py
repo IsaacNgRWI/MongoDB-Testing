@@ -71,17 +71,17 @@ find1 = collection_customers.find_one()  # finds the first instance of the recor
 print('find1:', find1)
 
 counter = 0
-for i in collection_customers.find(): # finds all occurrences of the records that match the description
+for i in collection_customers.find().limit(5): # finds all occurrences of the records that match the description
     counter += 1
     print(f'find2.{counter}: {i}')
 
 # only return selected fields of records
 counter = 0
-for i in collection_customers.find({},{'address':1}):  # only show address and nothing else (_id is shown unless sepcified)
+for i in collection_customers.find({},{'address':1}).limit(5):  # only show address and nothing else (_id is shown unless sepcified)
     counter += 1
     print(f'find3.{counter}:', i)
 counter = 0
-for i in collection_customers.find({}, {'address':0}):  # show everything but address
+for i in collection_customers.find({}, {'address':0}).limit(5):  # show everything but address
     counter += 1
     print(f'find4.{counter}:', i)
 
@@ -98,6 +98,12 @@ print('query2:', query2)  # case sensitive
 
 query3 = collection_customers.find_one({'name': {'$regex': '^M'}})  # finds first instance of the person whose name starts with M
 print('query3:', query3)  # regular expression only works on strings
+
+# querying records based on multiple attributes
+counter = 0
+for i in collection_customers.find({'$and': [{'name': 'Name started after M'}, {'address': 'One way 98'}]}):
+    counter += 1
+    print(f'query4.{counter}:', i)
 
 
 # sorting query results
